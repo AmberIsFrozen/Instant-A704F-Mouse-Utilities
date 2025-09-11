@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.31)
 
 project(A704F_Mouse VERSION 1.0.0 LANGUAGES CXX)
 include(FetchContent)
@@ -9,6 +9,10 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(PROGRAM_AUTHOR, "AmberFrost")
+set(PROGRAM_AUTHOR_EMAIL, "amberfrost@lx862.com")
+set(PROGRAM_SRC_URL, "https://github.com/AmberIsFrozen/Instant-A704F-Mouse-Utilities")
 
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
@@ -81,7 +85,7 @@ set(BUILD_SHARED_LIBS FALSE)
 
 FetchContent_Declare(
   hidapi
-  URL      https://github.com/libusb/hidapi/archive/refs/tags/hidapi-0.14.0.zip
+  URL      https://github.com/libusb/hidapi/archive/refs/tags/hidapi-0.15.0.zip
   DOWNLOAD_EXTRACT_TIMESTAMP ON
 )
 
@@ -118,8 +122,8 @@ set(CPACK_PACKAGE_DESCRIPTION
 "This is an unofficial program that can be used to configure the A704F Mouse by Instant Microelectronics.
 USB VID/PID '18f8:1286'")
 
-set(CPACK_DEBIAN_PACKAGE_MAINTAINER "LX86 <lx86@lx862.com>")
-set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://github.com/Kenny-Hui/Instant-A704F-Mouse-Utilities")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "${PROGRAM_AUTHOR} <${PROGRAM_AUTHOR_EMAIL}>")
+set(CPACK_DEBIAN_PACKAGE_HOMEPAGE PROGRAM_SRC_URL)
 
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "qt6-base-dev")
 set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA ${CMAKE_CURRENT_SOURCE_DIR}/script/postinst)
