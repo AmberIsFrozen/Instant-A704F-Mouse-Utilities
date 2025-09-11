@@ -116,11 +116,10 @@ set(CPACK_DEBIAN_PACKAGE_RELEASE 1)
 # string(TIMESTAMP NOW "%s")
 # set(CPACK_DEBIAN_PACKAGE_RELEASE ${NOW})
 
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Mouse Utilities for the Instant A704F Mouse")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Mouse Utilities for the Instant A704/A704F Mouse")
 
 set(CPACK_PACKAGE_DESCRIPTION
-"This is an unofficial program that can be used to configure the A704F Mouse by Instant Microelectronics.
-USB VID/PID '18f8:1286'")
+"This is an unofficial program that can be used to configure the A704/A704F Mouse by Instant Microelectronics.")
 
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "${PROGRAM_AUTHOR} <${PROGRAM_AUTHOR_EMAIL}>")
 set(CPACK_DEBIAN_PACKAGE_HOMEPAGE PROGRAM_SRC_URL)

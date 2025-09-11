@@ -9,12 +9,16 @@
 #define UDEV_RULES "51-a704f-usb-gaming-mouse.rules"
 
 hid_device_* HIDHelper::openMouseInterface(QWidget *parent) {
-    hid_device *handle = hid_open(VENDOR_ID, PRODUCT_ID, NULL);
+    hid_device *handle;
+
+    for(VendorProductID vpid : supportedDevices) {
+        handle = hid_open(vpid.vendorId, vpid.productId, NULL);
+        if(handle) break;
+    }
 
     if(!handle) {
-        qCritical("Cannot open device with Vendor ID %x Product ID %x", VENDOR_ID, PRODUCT_ID);
-        QMessageBox::critical(parent, "Error", QString("Cannot open corresponding device. (%1:%2)\nIf the device is plugged in, it is likely you need to run this program under sudo.\nThe program will then prompt you to install an udev rules so you do not have to elevate the application again in the future.")
-                                                 .arg(QString::number(VENDOR_ID, 16)).arg(QString::number(PRODUCT_ID, 16)));
+        qCritical("Cannot find device with the designated Vendor/Product ID");
+        QMessageBox::critical(parent, "Error", QString("Cannot find the corresponding device.\nIf the device is plugged in, it is likely you need to run this program under root.\nThe program will then prompt you to install an udev rules so you do not have to elevate the application again in the future."));
         QApplication::quit();
         exit(1);
     }
@@ -34,7 +38,12 @@ hid_device_* HIDHelper::openMouseInterface(QWidget *parent) {
 }
 
 hid_device_* HIDHelper::openKeyboardInterface() {
-    hid_device_info *infos = hid_enumerate(VENDOR_ID, PRODUCT_ID);
+    hid_device_info *infos;
+    for(VendorProductID vpid : supportedDevices) {
+        infos = hid_enumerate(vpid.vendorId, vpid.productId);
+        if(infos) break;
+    }
+
     hid_device_info *info = infos;
     char* targetInterface = nullptr;
 

@@ -56,7 +56,7 @@ int parseCLI(QStringList arguments) {
 
             qDebug() << "Daemon started.";
         } else {
-            qCritical() << "Cannot open the keyboard interface (Interface 1). Have you installed the udev rules or run as sudo?";
+            qCritical() << "Cannot open the keyboard interface (Interface 1). Have you installed the udev rules or run as root?";
             doExecLoop = false;
         }
     }
