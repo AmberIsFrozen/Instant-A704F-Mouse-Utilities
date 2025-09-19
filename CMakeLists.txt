@@ -34,7 +34,7 @@ set(PROJECT_SOURCES
         src/customkeyboarddialog.h
         src/customkeyboarddialog.cpp
         src/customkeyboarddialog.ui
-        src/DataReference.cpp
+        src/data.cpp
         src/usb_hid_keys.h
 )
 

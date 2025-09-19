@@ -1,6 +1,6 @@
 #include "custominputhandler.h"
 #include "hidhelper.h"
-#include "DataReference.cpp"
+#include "data.cpp"
 #include <QThread>
 #include <hidapi/hidapi.h>
 #include <unistd.h>

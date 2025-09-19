@@ -1,5 +1,5 @@
 #include "customkeyboarddialog.h"
-#include "DataReference.cpp"
+#include "data.cpp"
 #include "ui_customkeyboarddialog.h"
 
 CustomKeyboardDialog::CustomKeyboardDialog(MouseSettings::MouseButton &btn, QWidget *parent) :
