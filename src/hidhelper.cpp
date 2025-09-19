@@ -19,8 +19,6 @@ hid_device_* HIDHelper::openMouseInterface(QWidget *parent) {
     if(!handle) {
         qCritical("Cannot find device with the designated Vendor/Product ID");
         QMessageBox::critical(parent, "Error", QString("Cannot find the corresponding device.\nIf the device is plugged in, it is likely you need to run this program under root.\nThe program will then prompt you to install an udev rules so you do not have to elevate the application again in the future."));
-        QApplication::quit();
-        exit(1);
     }
 
     if(geteuid() == 0) { // Root UID

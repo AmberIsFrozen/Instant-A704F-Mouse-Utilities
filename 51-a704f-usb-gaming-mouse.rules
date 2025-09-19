@@ -1,2 +1,4 @@
 SUBSYSTEM=="usb", ATTRS{idVendor}=="18f8", ATTRS{idProduct}=="1286", MODE="0666"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="30fa", ATTRS{idProduct}=="1701", MODE="0666"
 KERNEL=="hidraw*", ATTRS{busnum}=="1", ATTRS{idVendor}=="18f8", ATTRS{idProduct}=="1286", MODE="0666"
+KERNEL=="hidraw*", ATTRS{busnum}=="1", ATTRS{idVendor}=="30fa", ATTRS{idProduct}=="1701", MODE="0666"
