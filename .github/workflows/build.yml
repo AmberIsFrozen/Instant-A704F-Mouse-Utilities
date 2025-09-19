@@ -22,7 +22,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Install Dependencies
-      run: sudo apt install libudev-dev libhidapi-dev libusb-dev
+      run: sudo apt install libudev-dev libhidapi-dev libusb-1.0-0-dev
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
     - name: Configure CMake
