@@ -1,7 +1,7 @@
-# Instant A704F Mouse Utilities for Linux
+# Instant A704/A704F Mouse Utilities for Linux
 ![](https://img.shields.io/badge/jank_inside-brown) ![](https://img.shields.io/badge/works_on-my_machine-green)
 
-This is a mouse configuration tools for the [A704F Gaming Mouse IC](https://instant-sys.com/uploads/pdf/norm/SPEC/A704F_SPEC_EN.V1.00.pdf) by Instant Microelectronics.  
+This is a mouse configuration tools for the [A704](https://instant-sys.com/uploads/pdf/norm/SPEC/A704C_SPEC_EN.V1.01.pdf)/[A704F](https://instant-sys.com/uploads/pdf/norm/SPEC/A704F_SPEC_EN.V1.00.pdf) Gaming Mouse IC by Instant Microelectronics.  
 
 Configurable items including custom button bindings, change speed of breathing light and DPI configuration.  
 
@@ -13,7 +13,9 @@ Configurable items including custom button bindings, change speed of breathing l
     </tr>
 </table>
 
-Vendor ID/Product ID: `18f8:1286`  
+Vendor IDs/Product IDs:
+- `18f8:1286` (A704F)
+- `30fa:1701` (A704)
 All the observed details can be found in [SPECS.md](./SPECS.md)
 
 For more context and story, [I have written a blog about it](https://blog.lx862.com/blog/2024-05-13-reverse-engineering-a-mouse/)
@@ -25,10 +27,13 @@ For more context and story, [I have written a blog about it](https://blog.lx862.
 **For other distribution:**
 Sorry I do not know how to or I am too lazy to package.
 
-0. Make sure you have Qt 6 installed.
+0. Make sure you have Qt 6 installed. (If you are running KDE Plasma 6.x then you already have Qt 6)
 1. Download the binary from the [release page](https://github.com/Kenny-Hui/Instant-A704F-Mouse-Utilities/releases/latest)
 2. Put it in an safe location
 3. Run it!
+
+**Note:**
+The **Side Button A** and **Side Button B** is intentionally named ambigiously as their meaning may not be the same on some mouse models (A means forward button and B means backward button, however some mouse model have it the other way around). You will have to do some basic testing to figure that out for your own mouse.
 
 ### Flags
 `--apply` - Apply settings to the mouse unattendedly without launching a GUI (As the mouse does not store settings persistently)  
@@ -38,7 +43,7 @@ A common setup is to add an autostart entry with the program argument `--apply -
 
 ## Build from Source
 ```
-git clone https://github.com/Kenny-Hui/Instant-A704F-Mouse-Utilities
+git clone https://github.com/AmberIsFrozen/Instant-A704F-Mouse-Utilities
 cd Instant-A704F-Mouse-Utilities
 mkdir build
 cd build

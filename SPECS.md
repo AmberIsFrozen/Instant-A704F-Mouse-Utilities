@@ -30,10 +30,10 @@ Endpoint: 0
     <td>03</td><td>Middle Mouse Button</td>
   </tr>
   <tr>
-    <td>04</td><td>Side Forward (Towards front)</td>
+    <td>05 (04 for A704?)</td><td>Side Forward (Towards front)</td>
   </tr>
   <tr>
-    <td>05</td><td>Side Backward (Towards user)</td>
+    <td>04 (05 for A704?)</td><td>Side Backward (Towards user)</td>
   </tr>
   <tr>
     <td>06</td><td>Middle backward (Towards user)</td>
