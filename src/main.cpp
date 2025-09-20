@@ -40,7 +40,6 @@ CLIResult parseCLI(QStringList arguments) {
         MouseSettings mouseSettings = MouseSettings();
         mouseSettings.loadFromFile();
         HIDHelper::applyMouseSettings(dev, mouseSettings);
-        hid_close(dev);
 
         qDebug() << "Mouse settings applied.";
     }

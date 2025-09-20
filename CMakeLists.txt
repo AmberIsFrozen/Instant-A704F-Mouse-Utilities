@@ -102,6 +102,7 @@ install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/a704f-mouse.desktop DESTINATION share/
 
 set(CPACK_GENERATOR "DEB")
 set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
+set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE amd64)
 
 # Uncomment this lines to enable shlibs for this project
 # set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
