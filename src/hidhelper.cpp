@@ -46,9 +46,8 @@ hid_device_* HIDHelper::openKeyboardInterface() {
     char* targetInterface = nullptr;
 
     while(info) {
-        qDebug() << "Interface" << info->interface_number << "at" << info->path;
         if(info->interface_number == 1) {
-            qDebug() << "Interface 1 found";
+            qDebug() << "Interface" << info->interface_number << "at" << info->path;
             targetInterface = info->path;
             break;
         }
@@ -109,14 +108,16 @@ void HIDHelper::applyMouseSettings(hid_device *dev, MouseSettings settings) {
     }
 
     // DPI
-    int enabledDpiBit = 0;
-    for(int i = 0; i < settings.DPI_PROFILES; i++) {
-        enabledDpiBit += settings.dpiProfiles[i].enabled ? 0b1 << i : 0b0 << i;
-    }
+    if(settings.applyDpi) {
+        int enabledDpiBit = 0;
+        for(int i = 0; i < settings.DPI_PROFILES; i++) {
+            enabledDpiBit += settings.dpiProfiles[i].enabled ? 0b1 << i : 0b0 << i;
+        }
 
-    for(int i = 0; i < settings.DPI_PROFILES; i++) {
-        MouseSettings::DPIProfile dpiProfile = settings.dpiProfiles[i];
-        int profileBits = 0x08 + i;
-        sendMouseReport(dev, DPI, settings.activeDpi, (dpiProfile.dpiValue << 4) | profileBits, enabledDpiBit);
+        for(int i = 0; i < settings.DPI_PROFILES; i++) {
+            MouseSettings::DPIProfile dpiProfile = settings.dpiProfiles[i];
+            int profileBits = 0x08 + i;
+            sendMouseReport(dev, DPI, settings.activeDpi, (dpiProfile.dpiValue << 4) | profileBits, enabledDpiBit);
+        }
     }
 }

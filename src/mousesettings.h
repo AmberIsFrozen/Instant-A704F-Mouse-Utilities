@@ -54,6 +54,7 @@ public:
     unsigned char scrollMode = 0x00;
     int fireRate = 4;
     int activeDpi = 0;
+    bool applyDpi = true;
 
     DPIProfile dpiProfiles[DPI_PROFILES] = {
         DPIProfile{3, true},

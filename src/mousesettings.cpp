@@ -30,6 +30,7 @@ void MouseSettings::loadFromFile() {
 
     // DPI
     settings.beginGroup("DPI");
+    applyDpi = settings.value("apply", applyDpi).toBool();
     activeDpi = settings.value("active_profile", activeDpi).toInt();
     int size = settings.beginReadArray("profiles");
     for(int i = 0; i < size; i++) {
@@ -67,6 +68,7 @@ void MouseSettings::saveToFile() const {
 
     // DPI
     settings.beginGroup("DPI");
+    settings.setValue("apply", applyDpi);
     settings.setValue("active_profile", activeDpi);
     settings.beginWriteArray("profiles");
     for(int i = 0; i < DPI_PROFILES; i++) {

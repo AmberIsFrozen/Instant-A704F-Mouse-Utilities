@@ -17,21 +17,21 @@ MainWindow::MainWindow(QWidget *parent)
 
     hid_init();
     ui->setupUi(this);
+    ui->disconnectedPage->hide();
     hid_device *dev = HIDHelper::openMouseInterface(this);
     HIDHelper::applyMouseSettings(dev, mouseSettings); // Apply config on startup, since config is not persistently stored on mouse
     hid_close(dev);
 
     initUIFields(mouseSettings);
-    hid_device *specialInputInterface = HIDHelper::openKeyboardInterface();
-    if(specialInputInterface) {
-        inputHandlerThread = new QThread();
-        MouseInputHandler *im = new MouseInputHandler(specialInputInterface, &mouseSettings);
-        im->moveToThread(inputHandlerThread);
-        connect(im, &MouseInputHandler::input, this, &MainWindow::handleSpecialInput);
-        connect(inputHandlerThread, &QThread::started, im, &MouseInputHandler::run);
-        connect(inputHandlerThread, &QThread::finished, im, &MouseInputHandler::deleteLater);
-        inputHandlerThread->start();
-    }
+    // Mouse ground thread
+    inputHandlerThread = new QThread();
+    MouseInputHandler *im = new MouseInputHandler(&mouseSettings);
+    im->moveToThread(inputHandlerThread);
+    connect(im, &MouseInputHandler::input, this, &MainWindow::handleSpecialInput);
+    connect(im, &MouseInputHandler::updateMouseStatus, this, &MainWindow::updateMouseStatus);
+    connect(inputHandlerThread, &QThread::started, im, &MouseInputHandler::run);
+    connect(inputHandlerThread, &QThread::finished, im, &MouseInputHandler::deleteLater);
+    inputHandlerThread->start();
 
     rgbPreview.init(ui->rgb_mouse_display, ui->rgb_mouse_base, { ui->rgb_mouse_red, ui->rgb_mouse_purple, ui->rgb_mouse_blue, ui->rgb_mouse_magenta });
 
@@ -66,6 +66,16 @@ void MainWindow::handleSpecialInput(unsigned char type, unsigned char mouseKeyPr
     }
 }
 
+void MainWindow::updateMouseStatus(bool isConnected) {
+    if(isConnected) {
+        ui->mainPage->show();
+        ui->disconnectedPage->hide();
+    } else {
+        ui->mainPage->hide();
+        ui->disconnectedPage->show();
+    }
+}
+
 void MainWindow::initUIFields(const MouseSettings settings) {
     // RGB
     ui->rgbNone->setChecked(settings.rgbMode == 0x17);
@@ -73,6 +83,7 @@ void MainWindow::initUIFields(const MouseSettings settings) {
     ui->rgbSuperFast->setChecked(settings.rgbMode == 0x15);
     ui->rgbFast->setChecked(settings.rgbMode == 0x13);
     ui->rgbSlow->setChecked(settings.rgbMode == 0x10);
+    ui->applyCheckBox->setChecked(settings.applyDpi);
 
     // DPI
     for(int i = 0; i < settings.DPI_PROFILES; i++) {
@@ -307,3 +318,6 @@ void MainWindow::on_volumeRadio_clicked(bool checked)
     }
 }
 
+void MainWindow::on_applyCheckBox_clicked(bool checked) {
+    mouseSettings.applyDpi = checked;
+}

@@ -75,6 +75,8 @@ private slots:
 
     void on_volumeRadio_clicked(bool checked);
 
+    void on_applyCheckBox_clicked(bool checked);
+
 private:
     Ui::MainWindow *ui;
     QThread *inputHandlerThread;
@@ -86,5 +88,6 @@ private:
     void initUIFields(const MouseSettings settings);
     void promptCustomBindingDialog(int buttonIndex);
     void handleSpecialInput(unsigned char type, unsigned char mouseKeyPressed, unsigned char dpi);
+    void updateMouseStatus(bool isConnected);
 };
 #endif // MAINWINDOW_H

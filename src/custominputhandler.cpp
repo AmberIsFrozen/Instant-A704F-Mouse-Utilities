@@ -5,9 +5,9 @@
 #include <hidapi/hidapi.h>
 #include <unistd.h>
 
-MouseInputHandler::MouseInputHandler(hid_device *device, MouseSettings *mouseSettings)
+MouseInputHandler::MouseInputHandler(MouseSettings *mouseSettings)
 {
-    this->device = device;
+    this->device = HIDHelper::openKeyboardInterface();
     this->mouseSettings = mouseSettings;
 }
 
@@ -18,7 +18,7 @@ MouseInputHandler::~MouseInputHandler()
 
 void MouseInputHandler::run() {
     unsigned char buf[10];
-    qDebug() << "Started monitoring keyboard interface";
+    qInfo() << "Start monitoring custom input interface";
 
     while(!QThread::currentThread()->isInterruptionRequested()) {
         int res = hid_read_timeout(device, buf, 10, 1000);
@@ -40,9 +40,19 @@ void MouseInputHandler::run() {
                     sendMultimediaKey(device, mButton.multimediaKey);
                 }
             }
+        } else if(res == -1) {
+            qInfo() << "Failed to read custom input Interface, retrying in 5 seconds...";
+            emit updateMouseStatus(false);
+            QThread::currentThread()->sleep(5);
+            hid_device_* device = HIDHelper::openKeyboardInterface();
+            if(device != nullptr) {
+                hid_close(this->device);
+                this->device = device;
+                emit updateMouseStatus(true);
+            }
         }
     }
-    qDebug() << "Stop monitoring for keyboard interface";
+    qInfo() << "Stop monitoring for custom input interface";
 }
 
 void MouseInputHandler::sendCustomKeyInput(hid_device *device, QKeyCombination keyCombo) {

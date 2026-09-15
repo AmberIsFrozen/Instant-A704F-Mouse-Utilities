@@ -10,11 +10,12 @@ class MouseInputHandler : public QObject
 {
     Q_OBJECT
 public:
-    MouseInputHandler(hid_device *device, MouseSettings *mouseSettings);
+    MouseInputHandler(MouseSettings *mouseSettings);
     ~MouseInputHandler();
     void run();
 signals:
     void input(unsigned char inputType, unsigned char mouseKey, unsigned char dpi);
+    void updateMouseStatus(bool isConnected);
 private:
     hid_device *device;
     MouseSettings *mouseSettings;
