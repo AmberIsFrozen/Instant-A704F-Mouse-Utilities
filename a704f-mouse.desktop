@@ -11,7 +11,7 @@ Name=A704F Mouse Utilities
 Comment=Configuration tool for the Instant A704F Mouse
 
 # The path to the folder in which the executable is run
-Path=/usr/local/bin
+Path=/usr/bin
 
 # The executable of the application, possibly with arguments.
 Exec=A704F_Mouse

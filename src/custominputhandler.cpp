@@ -57,7 +57,7 @@ void MouseInputHandler::run() {
 
 void MouseInputHandler::sendCustomKeyInput(hid_device *device, QKeyCombination keyCombo) {
     QList<unsigned char> inputList;
-    for(int key : DataReference::getModifiers(keyCombo.keyboardModifiers())) {
+    for(const int key : DataReference::getModifiers(keyCombo.keyboardModifiers())) {
         inputList.append(key);
     }
     inputList.append(DataReference::qt_key_to_hid_keycode.value(keyCombo.key()));

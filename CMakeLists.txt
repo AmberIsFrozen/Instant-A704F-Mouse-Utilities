@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.31)
 
-project(A704F_Mouse VERSION 1.0.2 LANGUAGES C CXX)
+project(A704F_Mouse VERSION 1.1.0 LANGUAGES CXX)
 include(FetchContent)
 
 set(CMAKE_AUTOUIC ON)
@@ -93,12 +93,12 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(hidapi)
 target_link_libraries(A704F_Mouse PUBLIC hidapi::hidapi)
 
-set(CMAKE_INSTALL_PREFIX /usr)
+# set(CMAKE_INSTALL_PREFIX /)
 
-install(TARGETS A704F_Mouse DESTINATION bin)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/51-a704f-usb-gaming-mouse.rules DESTINATION /etc/udev/rules.d)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/img/tray.png RENAME a704f-mouse.png DESTINATION share/pixmaps)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/a704f-mouse.desktop DESTINATION share/applications)
+install(TARGETS A704F_Mouse DESTINATION usr/local/bin)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/51-a704f-usb-gaming-mouse.rules DESTINATION etc/udev/rules.d)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/img/tray.png RENAME a704f-mouse.png DESTINATION usr/share/pixmaps)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/a704f-mouse.desktop DESTINATION usr/share/applications)
 
 set(CPACK_GENERATOR "DEB")
 set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
@@ -117,7 +117,7 @@ set(CPACK_DEBIAN_PACKAGE_RELEASE 1)
 # string(TIMESTAMP NOW "%s")
 # set(CPACK_DEBIAN_PACKAGE_RELEASE ${NOW})
 
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Mouse Utilities for the Instant A704/A704F Mouse")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Mouse utility for Instant A704/A704F mouse chipset.")
 
 set(CPACK_PACKAGE_DESCRIPTION
 "This is an unofficial program that can be used to configure the A704/A704F Mouse by Instant Microelectronics.")

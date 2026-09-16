@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     hid_close(dev);
 
     initUIFields(mouseSettings);
-    // Mouse ground thread
+    // Mouse monitoring thread
     inputHandlerThread = new QThread();
     MouseInputHandler *im = new MouseInputHandler(&mouseSettings);
     im->moveToThread(inputHandlerThread);

@@ -1,0 +1,27 @@
+# Maintainer: AmberFrost <amberfrost@lx862.com>
+pkgname='instant-a704f-mouse-utilities-git'
+pkgver=1.1.0
+pkgrel=1
+pkgdesc="Mouse utility software for Instant A704/A704F mouse chipset."
+arch=('x86_64')
+url="https://github.com/AmberIsFrozen/Instant-A704F-Mouse-Utilities"
+license=('MIT')
+depends=('qt6-base')
+makedepends=('git' 'hidapi' 'cmake')
+source=("$pkgname::git+https://github.com/AmberIsFrozen/Instant-A704F-Mouse-Utilities.git")
+sha256sums=('SKIP')
+
+build() {
+	cd "$pkgname"
+	cmake -B build -DCMAKE_BUILD_TYPE=Release
+	cmake --build build --config Release --parallel 2
+}
+
+package() {
+	cd "$pkgname"
+	cmake --install build --prefix "$pkgdir"
+}
+
+post_install() {
+	udevadm control --reload-rules && udevadm trigger
+}
