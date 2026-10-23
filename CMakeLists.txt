@@ -91,6 +91,7 @@ FetchContent_Declare(
 
 
 FetchContent_MakeAvailable(hidapi)
+target_include_directories(A704F_Mouse PRIVATE ${hidapi_SOURCE_DIR})
 target_link_libraries(A704F_Mouse PUBLIC hidapi::hidapi)
 
 # set(CMAKE_INSTALL_PREFIX /)
