@@ -94,6 +94,14 @@ FetchContent_MakeAvailable(hidapi)
 target_include_directories(A704F_Mouse PRIVATE ${hidapi_SOURCE_DIR})
 target_link_libraries(A704F_Mouse PUBLIC hidapi::hidapi)
 
+include(CTest)
+if(BUILD_TESTING)
+    add_executable(hidhelper_test tests/hidhelper_test.cpp src/hidhelper.cpp src/mousesettings.cpp)
+    target_include_directories(hidhelper_test PRIVATE src)
+    target_link_libraries(hidhelper_test PRIVATE Qt${QT_VERSION_MAJOR}::Widgets hidapi::hidapi)
+    add_test(NAME hidhelper COMMAND hidhelper_test)
+endif()
+
 # set(CMAKE_INSTALL_PREFIX /)
 
 install(TARGETS A704F_Mouse DESTINATION usr/local/bin)

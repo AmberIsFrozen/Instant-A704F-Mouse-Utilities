@@ -5,11 +5,13 @@
 #include <QString>
 #include <QFile>
 #include <unistd.h>
+#include <algorithm>
+#include <iterator>
 
 #define UDEV_RULES "51-a704f-usb-gaming-mouse.rules"
 
 hid_device_* HIDHelper::openMouseInterface(QWidget *parent) {
-    hid_device *handle;
+    hid_device *handle = nullptr;
 
     for(VendorProductID vpid : supportedDevices) {
         handle = hid_open(vpid.vendorId, vpid.productId, NULL);
@@ -36,27 +38,17 @@ hid_device_* HIDHelper::openMouseInterface(QWidget *parent) {
 }
 
 hid_device_* HIDHelper::openKeyboardInterface() {
-    hid_device_info *infos;
-    for(VendorProductID vpid : supportedDevices) {
-        infos = hid_enumerate(vpid.vendorId, vpid.productId);
-        if(infos) break;
-    }
-
-    hid_device_info *info = infos;
-    char* targetInterface = nullptr;
-
-    while(info) {
-        if(info->interface_number == 1) {
-            qDebug() << "Interface" << info->interface_number << "at" << info->path;
-            targetInterface = info->path;
-            break;
+    for(const VendorProductID &vpid : supportedDevices) {
+        hid_device_info *infos = hid_enumerate(vpid.vendorId, vpid.productId);
+        hid_device *handle = nullptr;
+        for(hid_device_info *info = infos; info; info = info->next) {
+            if(info->interface_number == 1) {
+                handle = hid_open_path(info->path);
+                if(handle) break;
+            }
         }
-        info = info->next;
-    }
-
-    if(targetInterface) {
-        hid_device *handle = hid_open_path(targetInterface);
-        return handle;
+        hid_free_enumeration(infos);
+        if(handle) return handle;
     }
     return nullptr;
 }
@@ -71,27 +63,22 @@ void HIDHelper::sendMouseReport(hid_device *dev, unsigned char updateType, unsig
 }
 
 void HIDHelper::sendRawMouseReport(hid_device *dev, unsigned char updateType, unsigned char data[6], int dataLength) {
-    unsigned char bytes[16]{0};
-    bytes[0] = 0x21; // bmRequestType
-    bytes[1] = 0x09; // bRequest SET_CONFIGURATION
-    bytes[2] = 0x07; // wValue (High)
-    bytes[3] = 0x03; // wValue (Low)
-    bytes[4] = 0x01; // wIndex
-    bytes[5] = 0x00;
-    bytes[6] = 0x08; // wLength
-    bytes[7] = 0x00;
-
-    bytes[8] = 0x07;
-    bytes[9] = updateType;
-
-    for(int i = 0; i < dataLength; i++) {
-        bytes[10+i] = data[i];
+    if(!dev || dataLength < 0 || dataLength > 6 || (dataLength && !data)) {
+        qWarning("Invalid mouse feature report");
+        return;
     }
 
-    hid_send_feature_report(dev, bytes, 16);
+    // HIDAPI supplies the USB setup packet. Only pass the report ID and payload.
+    unsigned char report[8]{0x07, updateType};
+    if(dataLength) std::copy_n(data, dataLength, report + 2);
+    if(hid_send_feature_report(dev, report, sizeof(report)) != sizeof(report)) {
+        qWarning() << "Failed to send mouse feature report:" << hid_error(dev);
+    }
 }
 
 void HIDHelper::applyMouseSettings(hid_device *dev, MouseSettings settings) {
+    if(!dev) return;
+
     // Apply data
     // RGB
     sendMouseReport(dev, RGB, 0x7f, settings.rgbMode);
