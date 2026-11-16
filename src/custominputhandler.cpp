@@ -21,9 +21,9 @@ void MouseInputHandler::run() {
     qInfo() << "Start monitoring custom input interface";
 
     while(!QThread::currentThread()->isInterruptionRequested()) {
-        int res = hid_read_timeout(device, buf, 10, 1000);
+        int res = device ? hid_read_timeout(device, buf, sizeof(buf), 1000) : -1;
 
-        if(res > 0) {
+        if(res >= 3 && buf[0] == 0x06) {
             unsigned char type = buf[0];
             unsigned char dpi = buf[2];
             unsigned char btnCode = buf[1] - 0xf0;
@@ -63,7 +63,8 @@ void MouseInputHandler::sendCustomKeyInput(hid_device *device, QKeyCombination k
     inputList.append(DataReference::qt_key_to_hid_keycode.value(keyCombo.key()));
 
     int keyCount = inputList.size();
-    unsigned char pushedButtons[keyCount];
+    unsigned char pushedButtons[6]{0};
+    if(keyCount > 6) return;
 
     // Push one by one
     for(int i = 0; i < keyCount; i++) {
@@ -86,5 +87,5 @@ void MouseInputHandler::sendMultimediaKey(hid_device *device, uint16_t key) {
     reports[0] = key >> 8;
     reports[1] = key & 0x00ff;
 
-    HIDHelper::sendRawMouseReport(device, HIDHelper::MakeInputMediaKey, reports, 4);
+    HIDHelper::sendRawMouseReport(device, HIDHelper::MakeInputMediaKey, reports, sizeof(reports));
 }
