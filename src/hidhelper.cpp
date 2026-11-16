@@ -6,17 +6,11 @@
 #include <QFile>
 #include <unistd.h>
 #include <algorithm>
-#include <iterator>
 
 #define UDEV_RULES "51-a704f-usb-gaming-mouse.rules"
 
 hid_device_* HIDHelper::openMouseInterface(QWidget *parent) {
-    hid_device *handle = nullptr;
-
-    for(VendorProductID vpid : supportedDevices) {
-        handle = hid_open(vpid.vendorId, vpid.productId, NULL);
-        if(handle) break;
-    }
+    hid_device *handle = openKeyboardInterface();
 
     if(!handle) {
         qCritical("Cannot find device with the designated Vendor/Product ID");
